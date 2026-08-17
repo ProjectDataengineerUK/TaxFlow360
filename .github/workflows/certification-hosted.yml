@@ -9,28 +9,61 @@ jobs:
     environment: certification
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: '${{ inputs.candidate_sha }}'
+          fetch-depth: 1
       - uses: hashicorp/setup-terraform@v3
         with: {terraform_version: '1.10.5'}
       - run: terraform fmt -check -recursive deploy/terraform
       - run: terraform -chdir=deploy/terraform/${{ matrix.cloud }} init -backend=false
       - run: terraform -chdir=deploy/terraform/${{ matrix.cloud }} validate
       - run: terraform -chdir=deploy/terraform/tests test
+      - name: Upload Terraform evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-${{ matrix.cloud }}-${{ inputs.candidate_sha }}
+          path: deploy/terraform/**/.terraform.lock.hcl
+          if-no-files-found: ignore
   databricks:
     runs-on: ubuntu-latest
     environment: databricks-certification
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: '${{ inputs.candidate_sha }}'
+          fetch-depth: 1
       - uses: databricks/setup-cli@main
+        with: {version: '0.240.0'}
       - run: databricks bundle validate -t staging
         working-directory: data/databricks
-      - run: databricks bundle run platform_certification -t staging --params candidate_sha=${{ inputs.candidate_sha }},logical_cutoff=${{ inputs.logical_cutoff }}
+      - name: Run hosted Databricks certification
+        if: ${{ inputs.apply_cloud == true }}
+        run: databricks bundle run platform_certification -t staging --params candidate_sha=${{ inputs.candidate_sha }},logical_cutoff=${{ inputs.logical_cutoff }}
         working-directory: data/databricks
+      - name: Upload Databricks evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: databricks-${{ inputs.candidate_sha }}
+          path: .local-evidence/**
+          if-no-files-found: ignore
   e2e-security:
     runs-on: ubuntu-latest
     environment: certification
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: '${{ inputs.candidate_sha }}'
+          fetch-depth: 1
       - uses: actions/setup-python@v5
         with: {python-version: '3.12.8'}
       - run: pip install -r constraints-certification.txt
       - run: PYTHONPATH=services/query-service/src:services/regulatory-service/src:data/databricks/src:tools/certification/src pytest tests/e2e tests/conformance tests/resilience tests/security -q
+      - name: Upload hosted test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-security-${{ inputs.candidate_sha }}
+          path: .pytest_cache/**
+          if-no-files-found: ignore
