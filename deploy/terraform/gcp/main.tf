@@ -11,15 +11,18 @@ variable "data_residency" {
   default = "BR"
 }
 variable "databricks_workspace_url" { type = string }
-provider "google" { project = var.project_id; region = var.region }
+provider "google" {
+  project = var.project_id
+  region  = var.region
+}
 
 module "platform_contract" {
-  source = "../modules/platform"
+  source                   = "../modules/platform"
   environment              = var.environment
   region                   = var.region
   data_residency           = var.data_residency
   databricks_workspace_url = var.databricks_workspace_url
-  tags = { cloud = "gcp" }
+  tags                     = { cloud = "gcp" }
 }
 
 resource "google_kms_key_ring" "lakehouse" {
@@ -32,7 +35,7 @@ resource "google_kms_crypto_key" "lakehouse" {
   rotation_period = "7776000s"
 }
 resource "google_storage_bucket" "lakehouse" {
-  name = "${var.project_id}-${module.platform_contract.name}-lakehouse"
+  name                        = "${var.project_id}-${module.platform_contract.name}-lakehouse"
   location                    = var.region
   uniform_bucket_level_access = true
   public_access_prevention    = "enforced"

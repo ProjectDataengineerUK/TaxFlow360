@@ -14,7 +14,16 @@ class ReconciliationEngine(private val policy:Policy=Policy("1.0.0","0.01".toBig
  private val reviews=ConcurrentHashMap<UUID,List<Review>>()
  fun reconcile(tenant:UUID, command:ReconcileCommand):Result {
   require(command.amounts.keys.containsAll(Source.entries)); require(command.sourceEventIds.isNotEmpty())
-  val fingerprint=sha256(listOf(tenant,command.transactionId,command.sourceEventIds.sorted(),policy.version,command.logicalCutoff).joinToString("|"))
+  val canonicalAmounts=Source.entries.joinToString(",") { source ->
+   val amount=command.amounts[source]?.setScale(2,RoundingMode.HALF_EVEN)?.toPlainString()?:"null"
+   "${source.name}=$amount"
+  }
+  val canonicalEvidence=listOf(
+   command.evidence.simulationIds.sorted(), command.evidence.ruleIds.sorted(),
+   command.evidence.memoryIds.sorted(), command.evidence.officialSourceIds.sorted()
+  )
+  val fingerprint=sha256(listOf(tenant,command.transactionId,canonicalAmounts,command.sourceEventIds.sorted(),
+   canonicalEvidence,policy.version,command.logicalCutoff).joinToString("|"))
   val key=tenant to command.idempotencyKey
   val existing=results[key]
   if(existing!=null) { if(existing.fingerprint!=fingerprint) throw IdempotencyConflict(); return existing }

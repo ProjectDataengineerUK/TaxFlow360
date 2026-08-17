@@ -10,15 +10,17 @@ variable "data_residency" {
   default = "BR"
 }
 variable "databricks_workspace_url" { type = string }
-provider "azurerm" { features {} }
+provider "azurerm" {
+  features {}
+}
 
 module "platform_contract" {
-  source = "../modules/platform"
+  source                   = "../modules/platform"
   environment              = var.environment
   region                   = var.region
   data_residency           = var.data_residency
   databricks_workspace_url = var.databricks_workspace_url
-  tags = { cloud = "azure" }
+  tags                     = { cloud = "azure" }
 }
 
 resource "azurerm_resource_group" "platform" {
@@ -27,16 +29,16 @@ resource "azurerm_resource_group" "platform" {
   tags     = module.platform_contract.tags
 }
 resource "azurerm_storage_account" "lakehouse" {
-  name = substr(replace("${module.platform_contract.name}lake", "-", ""), 0, 24)
-  resource_group_name             = azurerm_resource_group.platform.name
-  location                        = azurerm_resource_group.platform.location
-  account_tier                    = "Standard"
-  account_replication_type        = var.environment == "prod" ? "GRS" : "LRS"
-  account_kind                    = "StorageV2"
-  is_hns_enabled                  = true
-  min_tls_version                 = "TLS1_2"
-  public_network_access_enabled   = false
-  shared_access_key_enabled       = false
+  name                              = substr(replace("${module.platform_contract.name}lake", "-", ""), 0, 24)
+  resource_group_name               = azurerm_resource_group.platform.name
+  location                          = azurerm_resource_group.platform.location
+  account_tier                      = "Standard"
+  account_replication_type          = var.environment == "prod" ? "GRS" : "LRS"
+  account_kind                      = "StorageV2"
+  is_hns_enabled                    = true
+  min_tls_version                   = "TLS1_2"
+  public_network_access_enabled     = false
+  shared_access_key_enabled         = false
   infrastructure_encryption_enabled = true
   blob_properties {
     versioning_enabled = true

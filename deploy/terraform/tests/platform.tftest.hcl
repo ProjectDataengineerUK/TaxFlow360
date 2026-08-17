@@ -2,11 +2,11 @@ run "platform_contract" {
   command = plan
   module { source = "../modules/platform" }
   variables {
-    environment = "staging"
-    region = "southamerica-east1"
-    data_residency = "BR"
+    environment              = "staging"
+    region                   = "southamerica-east1"
+    data_residency           = "BR"
     databricks_workspace_url = "https://example.cloud.databricks.com"
-    tags = { owner = "platform-engineering" }
+    tags                     = { owner = "platform-engineering" }
   }
   assert {
     condition     = output.name == "taxflow360-staging"

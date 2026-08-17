@@ -40,10 +40,10 @@ variable "tags" {
 locals {
   name = "${var.project_name}-${var.environment}"
   mandatory_tags = merge(var.tags, {
-    application     = var.project_name
-    environment     = var.environment
-    data_residency  = var.data_residency
-    managed_by      = "terraform"
+    application    = var.project_name
+    environment    = var.environment
+    data_residency = var.data_residency
+    managed_by     = "terraform"
   })
 }
 

@@ -15,12 +15,12 @@ provider "aws" {
 }
 
 module "platform_contract" {
-  source                    = "../modules/platform"
-  environment               = var.environment
-  region                    = var.region
-  data_residency            = var.data_residency
-  databricks_workspace_url  = var.databricks_workspace_url
-  tags                      = { cloud = "aws" }
+  source                   = "../modules/platform"
+  environment              = var.environment
+  region                   = var.region
+  data_residency           = var.data_residency
+  databricks_workspace_url = var.databricks_workspace_url
+  tags                     = { cloud = "aws" }
 }
 
 resource "aws_kms_key" "lakehouse" {
@@ -35,7 +35,7 @@ resource "aws_s3_bucket" "lakehouse" {
   tags          = module.platform_contract.tags
 }
 resource "aws_s3_bucket_public_access_block" "lakehouse" {
-  bucket = aws_s3_bucket.lakehouse.id
+  bucket                  = aws_s3_bucket.lakehouse.id
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
