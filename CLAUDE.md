@@ -6,7 +6,7 @@
 
 ## Stack
 
-- **Estado atual:** sete waves SDD implementadas localmente; certificação hospedada e produção permanecem bloqueadas
+- **Estado atual:** certificação local executada com Python/JVM/frontend/Terraform; certificação hospedada e produção permanecem bloqueadas
 - **Cloud:** SaaS principal em AWS, com adapters Terraform para Azure e GCP
 - **Backend proposto:** Java/Kotlin para o núcleo transacional e Python para dados e IA
 - **Frontend proposto:** Next.js, React e TypeScript
@@ -66,7 +66,7 @@ $env:PYTHONPATH='tools/certification/src;services/query-service/src;services/reg
 python -m pytest tests -q --ignore=tests/performance/test_regulatory_100k.py --ignore=tests/performance/test_shadow_tax_100k.py
 ```
 
-O último gate local registrou 76 testes Python aprovados. Java/Gradle, Next.js, Terraform providers e Databricks exigem os workflows hospedados. Não declarar a plataforma `Built` ou `Shipped` antes da matriz de certificação completa.
+O último gate local registrou 84 testes Python aprovados, quatro serviços JVM aprovados, typecheck/build Next.js aprovados e validação Terraform do módulo de certificação. Providers cloud, Databricks workspace, E2E, performance hospedada e aprovações humanas permanecem `BLOCKED`. Não declarar a plataforma `Built` ou `Shipped` antes da matriz de certificação completa.
 
 ## Estado dos módulos
 
