@@ -1,0 +1,31 @@
+version: 1.0.0
+status: approved
+tiers:
+  - id: fast
+    gates:
+      - {id: contracts, wave: platform, required: true, owner: data-contracts, evidenceType: junit, timeoutMinutes: 5}
+      - {id: python-regression, wave: all, required: true, owner: application, evidenceType: junit, timeoutMinutes: 15}
+      - {id: jvm-tests, wave: tax-payment-reconciliation, required: true, owner: core, evidenceType: junit, timeoutMinutes: 15}
+      - {id: frontend-build, wave: control-tower, required: true, owner: frontend, evidenceType: json, timeoutMinutes: 15}
+      - {id: static-security, wave: all, required: true, owner: security, evidenceType: sarif, timeoutMinutes: 15}
+  - id: hosted
+    gates:
+      - {id: e2e-platform, wave: all, required: true, owner: qa, evidenceType: junit, timeoutMinutes: 30}
+      - {id: databricks-streaming, wave: shadow-tax, required: true, owner: data-platform, evidenceType: json, timeoutMinutes: 45, requiredCapabilities: [unity_catalog, cdf, serverless]}
+      - {id: databricks-ai-search, wave: regulatory-ai, required: true, owner: ai-platform, evidenceType: json, timeoutMinutes: 45, requiredCapabilities: [unity_catalog, ai_search, serverless]}
+      - {id: terraform-aws-plan, wave: platform, required: true, owner: cloud, evidenceType: json, timeoutMinutes: 20}
+      - {id: terraform-azure-plan, wave: platform, required: true, owner: cloud, evidenceType: json, timeoutMinutes: 20}
+      - {id: terraform-gcp-plan, wave: platform, required: true, owner: cloud, evidenceType: json, timeoutMinutes: 20}
+  - id: certification
+    gates:
+      - {id: tenant-isolation, wave: all, required: true, owner: security, evidenceType: junit, timeoutMinutes: 30}
+      - {id: replay-recovery, wave: all, required: true, owner: sre, evidenceType: junit, timeoutMinutes: 45}
+      - {id: integrated-100k, wave: all, required: true, owner: performance, evidenceType: json, timeoutMinutes: 60}
+      - {id: tax-catalog-approval, wave: tax-simulation, required: true, owner: tax-specialist, evidenceType: approval, timeoutMinutes: 1440}
+      - {id: regulatory-corpus-approval, wave: regulatory-ai, required: true, owner: regulatory-specialist, evidenceType: approval, timeoutMinutes: 1440}
+      - {id: security-approval, wave: all, required: true, owner: security, evidenceType: approval, timeoutMinutes: 1440}
+promotion:
+  missingGateStatus: BLOCKED
+  failOnRequiredSkipped: true
+  humanApprovals: [tax-catalog-approval, regulatory-corpus-approval, security-approval]
+approval: {preparedBy: release-governance-a, approvedBy: release-governance-b}

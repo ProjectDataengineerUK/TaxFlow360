@@ -1,0 +1,23 @@
+name: shadow-tax
+on:
+  pull_request:
+    paths: ['services/reconciliation-service/**','data/databricks/**','services/query-service/**','contracts/**','config/reconciliation-policy.yaml','tests/**']
+  workflow_dispatch:
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install pytest pydantic fastapi pyyaml httpx
+      - run: pytest tests/golden/test_shadow_tax_cases.py tests/security/test_shadow_tax_isolation.py tests/streaming/test_shadow_tax_replay.py tests/performance/test_shadow_tax_100k.py
+  jvm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - uses: gradle/actions/setup-gradle@v4
+      - run: gradle test
+        working-directory: services/reconciliation-service

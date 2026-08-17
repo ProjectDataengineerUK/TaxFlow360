@@ -1,0 +1,33 @@
+source_policy:
+  version: 1.0.0
+  require_https: true
+  require_sha256: true
+  live_fetch_allowed: false
+  exact_hostname_match: true
+  reject_user_supplied_urls: true
+  authorities:
+    - id: presidencia_republica
+      name: Presidência da República
+      allowed_hosts:
+        - www.planalto.gov.br
+      source_types: [constitution, complementary_law, law, decree]
+    - id: receita_federal_brasil
+      name: Receita Federal do Brasil
+      allowed_hosts:
+        - www.gov.br
+      required_path_prefixes:
+        - /receitafederal/
+      source_types: [normative_instruction, official_guidance, tax_table]
+    - id: ministerio_fazenda
+      name: Ministério da Fazenda
+      allowed_hosts:
+        - www.gov.br
+      required_path_prefixes:
+        - /fazenda/
+      source_types: [official_guidance, technical_note]
+  validation:
+    normalized_hostname_required: true
+    credentials_in_url_forbidden: true
+    fragments_forbidden: true
+    redirects_followed: false
+    content_hash_pattern: "^[a-f0-9]{64}$"

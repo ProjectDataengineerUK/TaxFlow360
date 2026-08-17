@@ -1,0 +1,54 @@
+digital_twin:
+  version: 1.0.0
+  status: draft
+  currency: BRL
+  numeric_type: decimal_string
+  rounding: {scale: 2, mode: HALF_EVEN}
+  horizons_days: [30, 90, 180, 365]
+  minimum_history_days: 90
+  minimum_cash: {mode: fixed, amount: "100000.00"}
+  random_seed: 360
+  eligibility:
+    opening_balance_required: true
+    closed_batch_required: true
+    published_tax_simulation_required: true
+    minimum_completeness: "0.99"
+  model_gate:
+    maximum_mape: "0.15"
+    maximum_absolute_bias: "0.05"
+    minimum_interval_coverage: "0.80"
+    fallback: deterministic_baseline
+  stress_application_order: [revenue, receivables, costs, payables, tax_split, interest]
+  stresses:
+    independent:
+      - {id: revenue_down_10, driver: revenue, operation: multiply, factor: "0.90", start_day: 1, end_day: 365}
+      - {id: receivables_delay_15d, driver: receivables, operation: shift_days, days: 15, start_day: 1, end_day: 365}
+      - {id: costs_up_08, driver: costs, operation: multiply, factor: "1.08", start_day: 1, end_day: 365}
+      - {id: payables_accelerate_10d, driver: payables, operation: shift_days, days: -10, start_day: 1, end_day: 365}
+      - {id: tax_split_up_05, driver: tax_split, operation: multiply, factor: "1.05", start_day: 1, end_day: 365}
+      - {id: interest_up_200bps, driver: interest, operation: add_rate, value: "0.0200", start_day: 1, end_day: 365}
+    combined:
+      - id: demand_and_collection_shock
+        stress_ids: [revenue_down_10, receivables_delay_15d]
+      - id: margin_and_tax_shock
+        stress_ids: [costs_up_08, tax_split_up_05]
+      - id: severe_liquidity_shock
+        stress_ids: [revenue_down_10, receivables_delay_15d, costs_up_08, payables_accelerate_10d, tax_split_up_05, interest_up_200bps]
+  overrides:
+    enabled: true
+    create_new_assumption_snapshot: true
+    required_fields: [actor_id, justification, before_value, after_value, requested_at]
+    actor_must_be_authenticated: true
+    self_approval_allowed: false
+    approval_policy: four-eyes
+    immutable_audit_event: true
+  provenance:
+    tax_citations: inherited_from_wave3_simulation
+    arbitrary_source_urls_allowed: false
+    financial_assumptions_use_internal_evidence: true
+  governance:
+    owner: treasury-and-tax-governance
+    protected_review_required: true
+    historical_snapshots_immutable: true
+    automated_credit_decisions_allowed: false
+    financial_execution_allowed: false

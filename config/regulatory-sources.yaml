@@ -1,0 +1,31 @@
+version: 1.0.0
+status: approved
+fetchPolicy:
+  httpsOnly: true
+  redirectsAllowed: false
+  userSuppliedUrlsAllowed: false
+  privateNetworkTargetsAllowed: false
+  maxBytes: 10485760
+  allowedMimeTypes: [text/html, application/pdf, application/xml]
+sources:
+  - id: presidencia_republica
+    authority: Presidência da República
+    host: www.planalto.gov.br
+    pathPrefixes: [/ccivil_03/]
+    documentTypes: [constitution, complementary_law, law, decree]
+    schedule: daily
+  - id: receita_federal_brasil
+    authority: Receita Federal do Brasil
+    host: www.gov.br
+    pathPrefixes: [/receitafederal/]
+    documentTypes: [normative_instruction, official_guidance, tax_table]
+    schedule: daily
+  - id: ministerio_fazenda
+    authority: Ministério da Fazenda
+    host: www.gov.br
+    pathPrefixes: [/fazenda/]
+    documentTypes: [official_guidance, technical_note]
+    schedule: daily
+approval:
+  preparedBy: regulatory-admin-a
+  approvedBy: regulatory-admin-b

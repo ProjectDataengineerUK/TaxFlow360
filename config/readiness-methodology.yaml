@@ -1,0 +1,236 @@
+methodology:
+  version: 1.0.0
+  status: draft
+  name: tax-readiness-score
+  scoring:
+    scale:
+      minimum: 0
+      maximum: 100
+    numeric_type: decimal
+    rounding:
+      mode: HALF_EVEN
+      scale: 2
+    aggregation: weighted_sum
+    missing_evidence: ineligible
+  thresholds:
+    critical: 50
+    attention: 75
+    ready: 90
+  dimensions:
+    - id: fiscal
+      name: Fiscal
+      weight: 0.18
+      minimum_evidence: 1
+      criteria:
+        - id: fiscal_document_completeness
+          evidence: fiscal.document_completeness_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 55
+        - id: fiscal_classification_consistency
+          evidence: fiscal.classification_consistency_rate
+          operator: greater_than_or_equal
+          target: 0.98
+          points: 45
+      recommendations:
+        - id: remediate_fiscal_documents
+          when: fiscal_document_completeness.failed
+          severity: critical
+          action: Corrigir documentos ausentes ou inválidos e reprocessar o período.
+        - id: review_tax_classification
+          when: fiscal_classification_consistency.failed
+          severity: high
+          action: Revisar NCM, CST, CFOP e regras fiscais inconsistentes.
+    - id: financial
+      name: Financeiro
+      weight: 0.14
+      minimum_evidence: 1
+      criteria:
+        - id: financial_settlement_coverage
+          evidence: financial.settlement_coverage_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 60
+        - id: financial_due_date_quality
+          evidence: financial.valid_due_date_rate
+          operator: greater_than_or_equal
+          target: 0.98
+          points: 40
+      recommendations:
+        - id: close_financial_gaps
+          when: financial_settlement_coverage.failed
+          severity: high
+          action: Completar vínculos entre títulos, liquidações e documentos fiscais.
+        - id: normalize_due_dates
+          when: financial_due_date_quality.failed
+          severity: medium
+          action: Normalizar datas de vencimento para projeções confiáveis.
+    - id: erp_integrations
+      name: ERP e integrações
+      weight: 0.13
+      minimum_evidence: 1
+      criteria:
+        - id: integration_contract_compliance
+          evidence: integration.contract_compliance_rate
+          operator: greater_than_or_equal
+          target: 0.995
+          points: 60
+        - id: integration_freshness
+          evidence: integration.records_within_sla_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 40
+      recommendations:
+        - id: enforce_source_contracts
+          when: integration_contract_compliance.failed
+          severity: high
+          action: Adequar conectores ao contrato canônico e tratar registros em quarentena.
+        - id: restore_ingestion_sla
+          when: integration_freshness.failed
+          severity: medium
+          action: Corrigir atrasos e monitorar o SLA de ingestão.
+    - id: master_data
+      name: Cadastro
+      weight: 0.12
+      minimum_evidence: 1
+      criteria:
+        - id: master_data_completeness
+          evidence: master_data.required_fields_complete_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 55
+        - id: master_data_validity
+          evidence: master_data.valid_registration_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 45
+      recommendations:
+        - id: complete_master_data
+          when: master_data_completeness.failed
+          severity: high
+          action: Preencher campos obrigatórios de clientes, fornecedores e produtos.
+        - id: validate_registrations
+          when: master_data_validity.failed
+          severity: high
+          action: Validar inscrições e identificadores cadastrais nas fontes oficiais.
+    - id: payment_methods
+      name: Meios de pagamento
+      weight: 0.11
+      minimum_evidence: 1
+      criteria:
+        - id: payment_method_identification
+          evidence: payments.identified_method_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 55
+        - id: payment_traceability
+          evidence: payments.traceable_transaction_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 45
+      recommendations:
+        - id: identify_payment_methods
+          when: payment_method_identification.failed
+          severity: medium
+          action: Classificar o meio de pagamento em todas as operações.
+        - id: improve_payment_traceability
+          when: payment_traceability.failed
+          severity: high
+          action: Persistir identificadores de PSP, autorização e liquidação.
+    - id: reconciliation
+      name: Conciliação
+      weight: 0.13
+      minimum_evidence: 1
+      criteria:
+        - id: reconciliation_match_rate
+          evidence: reconciliation.matched_transaction_rate
+          operator: greater_than_or_equal
+          target: 0.999
+          points: 70
+        - id: reconciliation_timeliness
+          evidence: reconciliation.within_sla_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 30
+      recommendations:
+        - id: resolve_reconciliation_breaks
+          when: reconciliation_match_rate.failed
+          severity: critical
+          action: Investigar e resolver divergências fiscais, financeiras e bancárias.
+        - id: reduce_reconciliation_latency
+          when: reconciliation_timeliness.failed
+          severity: medium
+          action: Automatizar conciliação e reduzir pendências fora do SLA.
+    - id: split_readiness
+      name: Split readiness
+      weight: 0.10
+      minimum_evidence: 1
+      criteria:
+        - id: split_data_coverage
+          evidence: split.required_data_coverage_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 60
+        - id: split_simulation_success
+          evidence: split.successful_simulation_rate
+          operator: greater_than_or_equal
+          target: 0.99
+          points: 40
+      recommendations:
+        - id: complete_split_inputs
+          when: split_data_coverage.failed
+          severity: high
+          action: Capturar os dados fiscais e de pagamento exigidos para split payment.
+        - id: remediate_split_simulation
+          when: split_simulation_success.failed
+          severity: high
+          action: Corrigir operações que falharam na simulação determinística de split.
+    - id: working_capital
+      name: Capital de giro
+      weight: 0.09
+      minimum_evidence: 1
+      criteria:
+        - id: cash_flow_input_coverage
+          evidence: working_capital.cash_flow_input_coverage_rate
+          operator: greater_than_or_equal
+          target: 0.98
+          points: 55
+        - id: liquidity_buffer
+          evidence: working_capital.projected_liquidity_buffer_rate
+          operator: greater_than_or_equal
+          target: 1.00
+          points: 45
+      recommendations:
+        - id: complete_cash_flow_inputs
+          when: cash_flow_input_coverage.failed
+          severity: high
+          action: Completar recebíveis, pagamentos, tributos e saldos para projeção.
+        - id: mitigate_liquidity_risk
+          when: liquidity_buffer.failed
+          severity: critical
+          action: Planejar capital de giro para cobrir o déficit projetado pós-split.
+  evidence:
+    stable_ids_required: true
+    source_lineage_required: true
+    raw_sensitive_payloads_allowed: false
+    outcomes: [passed, failed, missing]
+  governance:
+    owner: tax-governance
+    approvers:
+      - tax-specialist
+      - data-governance
+      - risk-and-controls
+    approval_policy: four-eyes
+    publication:
+      draft_can_publish_official_score: false
+      protected_branch_review_required: true
+      golden_fixture_parity_required: true
+      reproducibility_gate_required: true
+    change_policy:
+      weights_or_thresholds: new-methodology-version
+      dimensions: new-major-version
+      criteria_or_recommendations: reviewed-versioned-change
+    audit:
+      immutable_versions: true
+      checksum_algorithm: sha256
+      retain_historical_versions: true

@@ -1,0 +1,18 @@
+resources:
+  jobs:
+    platform_certification:
+      name: taxflow-${bundle.target}-certification
+      max_concurrent_runs: 1
+      queue: {enabled: true}
+      parameters:
+        - {name: candidate_sha, default: BLOCKED_MISSING_CANDIDATE}
+        - {name: logical_cutoff, default: BLOCKED_MISSING_CUTOFF}
+      tasks:
+        - task_key: validate_bundles
+          spark_python_task: {python_file: ../src/regulatory_evaluation.py}
+        - task_key: validate_shadow_streaming
+          depends_on: [{task_key: validate_bundles}]
+          pipeline_task: {pipeline_id: '${resources.pipelines.taxflow_shadow_tax.id}', full_refresh: false}
+        - task_key: validate_regulatory_pipeline
+          depends_on: [{task_key: validate_bundles}]
+          pipeline_task: {pipeline_id: '${resources.pipelines.taxflow_regulatory_ai.id}', full_refresh: false}

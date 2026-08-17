@@ -1,0 +1,26 @@
+apiVersion: v3.1.0
+kind: DataContract
+name: regulatory-document
+version: 1.0.0
+status: active
+domain: regulatory
+description: Immutable bitemporal official document snapshots and citeable chunks.
+schema:
+  - {name: document_id, type: string, required: true}
+  - {name: document_version_id, type: string, required: true}
+  - {name: canonical_url, type: string, required: true}
+  - {name: authority_id, type: string, required: true}
+  - {name: document_type, type: string, required: true}
+  - {name: published_at, type: timestamp_tz, required: false}
+  - {name: valid_from, type: timestamp_tz, required: false}
+  - {name: valid_to, type: timestamp_tz, required: false}
+  - {name: captured_at, type: timestamp_tz, required: true}
+  - {name: content_sha256, type: string, required: true}
+  - {name: chunk_id, type: string, required: true}
+  - {name: locator, type: struct, required: true}
+  - {name: chunk_text, type: string, required: true}
+governance:
+  appendOnly: true
+  officialOriginRequired: true
+  citationUnitImmutable: true
+sla: {searchableWithin: PT30M}

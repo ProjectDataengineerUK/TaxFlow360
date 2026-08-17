@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "taxflow-synthetic"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+taxflow-generate = "generator:main"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src/generator.py"]
+sources = ["src"]

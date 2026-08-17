@@ -1,0 +1,69 @@
+apiVersion: v3.1.0
+kind: DataContract
+metadata:
+  name: tax-transaction
+  version: 1.0.0
+  description: Canonical fiscal and financial transaction
+  owner: platform-data
+  domain: tax-operations
+  classification: confidential
+schema:
+  type: table
+  columns:
+    - name: event_id
+      type: string
+      required: true
+      unique: true
+    - name: tax_transaction_id
+      type: string
+      required: true
+    - name: tenant_id
+      type: string
+      required: true
+    - name: company_tax_id
+      type: string
+      required: true
+      classification: pii
+    - name: source_system
+      type: string
+      required: true
+    - name: source_event_id
+      type: string
+      required: true
+    - name: occurred_at
+      type: timestamp_tz
+      required: true
+    - name: operation_amount
+      type: decimal(20,2)
+      required: true
+      constraints:
+        minimum: 0
+    - name: currency
+      type: string
+      required: true
+      constraints:
+        pattern: "^[A-Z]{3}$"
+    - name: schema_version
+      type: string
+      required: true
+quality:
+  completeness:
+    event_id: 1.0
+    tax_transaction_id: 1.0
+    tenant_id: 1.0
+  uniqueness:
+    event_id: 1.0
+sla:
+  availability: 99.9%
+  latency: PT15M
+evolution:
+  compatibility: backward
+  deprecation_policy: 90 days with consumer impact analysis
+consumers:
+  - name: transaction-plane
+    owner: platform-engineering
+    usage: deterministic tax and payment processing
+  - name: lakehouse
+    owner: platform-data
+    usage: readiness, simulation, digital twin and shadow tax
+

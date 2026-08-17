@@ -1,0 +1,94 @@
+catalog:
+  version: 1.0.0
+  status: synthetic-approved
+  synthetic: true
+  description: Deterministic test snapshot; rates are synthetic and not tax advice.
+  rounding:
+    scale: 2
+    mode: HALF_EVEN
+  currency: BRL
+  governance:
+    immutable: true
+    four_eyes_required: true
+    official_source_required: true
+    runtime_source_fetch: false
+  rules:
+    - id: current-general-2026
+      component: CURRENT
+      scenario: current
+      rate: "0.1800"
+      priority: 100
+      valid_from: "2026-01-01T00:00:00Z"
+      valid_until: "2027-01-01T00:00:00Z"
+      status: approved
+      author_id: synthetic-tax-specialist-a
+      approver_id: synthetic-tax-specialist-b
+      predicates:
+        operation_type: sale
+        jurisdiction: BR
+      sources: &constitutional_sources
+        - source_id: ec132-2023-art156a
+          source_url: https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc132.htm
+          authority: Presidência da República
+          document_id: EC-132-2023
+          provision: art. 156-A
+          publication_date: "2023-12-20"
+          captured_at: "2026-08-15T00:00:00Z"
+          content_sha256: "1321321321321321321321321321321321321321321321321321321321321321"
+          status: validated
+    - id: cbs-general-2027
+      component: CBS
+      scenario: reform
+      rate: "0.0880"
+      priority: 100
+      valid_from: "2027-01-01T00:00:00Z"
+      valid_until: null
+      status: approved
+      author_id: synthetic-tax-specialist-a
+      approver_id: synthetic-tax-specialist-b
+      predicates:
+        operation_type: sale
+        jurisdiction: BR
+      sources: *constitutional_sources
+    - id: ibs-general-2027
+      component: IBS
+      scenario: reform
+      rate: "0.1770"
+      priority: 100
+      valid_from: "2027-01-01T00:00:00Z"
+      valid_until: null
+      status: approved
+      author_id: synthetic-tax-specialist-a
+      approver_id: synthetic-tax-specialist-b
+      predicates:
+        operation_type: sale
+        jurisdiction: BR
+      sources: *constitutional_sources
+    - id: split-cbs-general-2027
+      component: CBS_SPLIT
+      scenario: split
+      rate: "0.0880"
+      priority: 100
+      valid_from: "2027-01-01T00:00:00Z"
+      valid_until: null
+      status: approved
+      author_id: synthetic-tax-specialist-a
+      approver_id: synthetic-tax-specialist-b
+      predicates:
+        operation_type: sale
+        jurisdiction: BR
+      sources: *constitutional_sources
+    - id: split-ibs-general-2027
+      component: IBS_SPLIT
+      scenario: split
+      rate: "0.1770"
+      priority: 100
+      valid_from: "2027-01-01T00:00:00Z"
+      valid_until: null
+      status: approved
+      author_id: synthetic-tax-specialist-a
+      approver_id: synthetic-tax-specialist-b
+      predicates:
+        operation_type: sale
+        jurisdiction: BR
+      sources: *constitutional_sources

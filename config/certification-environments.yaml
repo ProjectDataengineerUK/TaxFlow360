@@ -1,0 +1,25 @@
+version: 1.0.0
+status: approved
+environments:
+  - id: local
+    capabilities: [python, synthetic]
+    ttlHours: 0
+    maxBudget: '0.00'
+  - id: hosted-app
+    capabilities: [java21, node22, postgres, containers]
+    ttlHours: 8
+    maxBudget: '50.00'
+  - id: databricks-certification
+    capabilities: [unity_catalog, cdf, serverless, ai_search, mlflow]
+    ttlHours: 8
+    maxBudget: '200.00'
+  - id: cloud-plan
+    capabilities: [terraform_plan, aws, azure, gcp]
+    ttlHours: 4
+    maxBudget: '10.00'
+safety:
+  syntheticDataOnly: true
+  applyRequiresApproval: true
+  teardownRequired: true
+  staticCredentialsAllowed: false
+approval: {preparedBy: platform-admin-a, approvedBy: platform-admin-b}

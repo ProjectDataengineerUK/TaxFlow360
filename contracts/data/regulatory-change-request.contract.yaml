@@ -1,0 +1,23 @@
+apiVersion: v3.1.0
+kind: DataContract
+name: regulatory-change-request
+version: 1.0.0
+status: active
+domain: regulatory
+description: Human-governed proposal created from official document diffs.
+schema:
+  - {name: change_request_id, type: string, required: true}
+  - {name: tenant_id, type: string, required: true}
+  - {name: version, type: long, required: true}
+  - {name: status, type: string, required: true}
+  - {name: source_document_version_ids, type: array<string>, required: true}
+  - {name: affected_rule_ids, type: array<string>, required: true}
+  - {name: diff_sha256, type: string, required: true}
+  - {name: submitted_by, type: string, required: false}
+  - {name: approved_by, type: string, required: false}
+  - {name: golden_tests_passed, type: boolean, required: true}
+governance:
+  appendOnly: true
+  fourEyesRequired: true
+  aiCanApprove: false
+  aiCanPublish: false

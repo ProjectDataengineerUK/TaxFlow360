@@ -1,0 +1,33 @@
+bundle:
+  name: taxflow360-lakehouse
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog managed outside this bundle
+  source_path:
+    description: Cloud storage URI containing canonical envelopes
+  checkpoint_path:
+    description: Cloud storage URI for streaming checkpoints
+
+workspace:
+  root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}
+
+targets:
+  dev:
+    mode: development
+    default: true
+    variables:
+      catalog: taxflow_dev
+      source_path: ${workspace.file_path}/sample-data
+      checkpoint_path: dbfs:/taxflow/dev/checkpoints
+  staging:
+    mode: production
+    variables:
+      catalog: taxflow_staging
+  prod:
+    mode: production
+    variables:
+      catalog: taxflow_prod

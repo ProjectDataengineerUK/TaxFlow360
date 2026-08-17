@@ -1,0 +1,36 @@
+resources:
+  pipelines:
+    taxflow_regulatory_ai:
+      name: taxflow-${bundle.target}-regulatory-ai
+      catalog: ${var.catalog}
+      target: taxflow_regulatory
+      channel: CURRENT
+      edition: ADVANCED
+      photon: true
+      serverless: true
+      continuous: false
+      libraries:
+        - pypi: {package: PyYAML==6.0.2}
+        - file: {path: ../src/regulatory_documents.py}
+        - file: {path: ../src/regulatory_chunking.py}
+        - file: {path: ../src/regulatory_change_detection.py}
+      configuration:
+        taxflow.regulatory_sources_path: /Volumes/${var.catalog}/taxflow_config/governance/regulatory-sources.yaml
+        taxflow.regulatory_snapshot_root: /Volumes/${var.catalog}/taxflow_regulatory/snapshots
+  jobs:
+    regulatory_capture_and_index:
+      name: taxflow-${bundle.target}-regulatory-capture-index
+      max_concurrent_runs: 1
+      queue: {enabled: true}
+      tasks:
+        - task_key: capture
+          spark_python_task: {python_file: ../src/regulatory_capture.py}
+        - task_key: transform
+          depends_on: [{task_key: capture}]
+          pipeline_task: {pipeline_id: '${resources.pipelines.taxflow_regulatory_ai.id}', full_refresh: false}
+        - task_key: sync_index
+          depends_on: [{task_key: transform}]
+          spark_python_task: {python_file: ../src/regulatory_index.py}
+        - task_key: evaluate
+          depends_on: [{task_key: sync_index}]
+          spark_python_task: {python_file: ../src/regulatory_evaluation.py}

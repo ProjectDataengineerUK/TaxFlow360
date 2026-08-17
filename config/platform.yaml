@@ -1,0 +1,24 @@
+platform:
+  environment: local
+  cloud: local
+  default_currency: BRL
+events:
+  schema_compatibility: backward
+  manual_commit: true
+  dead_letter_suffix: .dlq
+  max_retries: 5
+tenancy:
+  require_tenant_context: true
+  deny_cross_tenant_by_default: true
+tax:
+  rounding_mode: HALF_EVEN
+  monetary_scale: 2
+  require_four_eyes_approval: true
+data:
+  bronze_mode: append
+  synthetic_profiles:
+    small: 100000
+    medium: 10000000
+    enterprise: 100000000
+observability:
+  trace_sample_rate: 0.1

@@ -1,0 +1,33 @@
+resources:
+  pipelines:
+    taxflow_readiness:
+      name: taxflow-${bundle.target}-readiness
+      catalog: ${var.catalog}
+      target: taxflow_readiness
+      channel: CURRENT
+      edition: ADVANCED
+      photon: true
+      serverless: true
+      continuous: false
+      libraries:
+        - file:
+            path: ../src/readiness_methodology.py
+        - file:
+            path: ../src/gold_readiness.py
+      configuration:
+        taxflow.readiness_methodology_path: /Volumes/${var.catalog}/taxflow_config/governance/readiness-methodology.yaml
+        taxflow.readiness_cutoff_at: "2026-12-31T23:59:59Z"
+        taxflow.readiness_source_table: ${var.catalog}.taxflow.silver_transactions
+        pipelines.clusterShutdown.delay: 0s
+
+  jobs:
+    taxflow_readiness_assessment:
+      name: taxflow-${bundle.target}-readiness-assessment
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: publish_readiness
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.taxflow_readiness.id}
+            full_refresh: false
+      queue:
+        enabled: true

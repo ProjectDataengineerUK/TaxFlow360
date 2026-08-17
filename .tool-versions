@@ -1,0 +1,5 @@
+java temurin-21.0.5+11
+python 3.12.8
+nodejs 22.14.0
+terraform 1.10.5
+databricks 0.240.0

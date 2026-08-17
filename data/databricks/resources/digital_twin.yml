@@ -1,0 +1,41 @@
+resources:
+  pipelines:
+    taxflow_digital_twin:
+      name: taxflow-${bundle.target}-digital-twin
+      catalog: ${var.catalog}
+      target: taxflow_digital_twin
+      channel: CURRENT
+      edition: ADVANCED
+      photon: true
+      serverless: true
+      continuous: false
+      libraries:
+        - pypi:
+            package: PyYAML==6.0.2
+        - file:
+            path: ../src/digital_twin_config.py
+        - file:
+            path: ../src/digital_twin_reference.py
+        - file:
+            path: ../src/digital_twin_forecast.py
+        - file:
+            path: ../src/digital_twin_backtest.py
+        - file:
+            path: ../src/gold_digital_twin.py
+      configuration:
+        taxflow.digital_twin_config_path: /Volumes/${var.catalog}/taxflow_config/governance/digital-twin-scenarios.yaml
+        taxflow.digital_twin_source_table: ${var.catalog}.taxflow.silver_transactions
+        taxflow.digital_twin_tax_table: ${var.catalog}.taxflow_simulation.gold_tax_simulation
+        taxflow.digital_twin_model_mode: deterministic_baseline
+        pipelines.clusterShutdown.delay: 0s
+  jobs:
+    taxflow_digital_twin_projection:
+      name: taxflow-${bundle.target}-digital-twin
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: publish_projection_snapshot
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.taxflow_digital_twin.id}
+            full_refresh: false

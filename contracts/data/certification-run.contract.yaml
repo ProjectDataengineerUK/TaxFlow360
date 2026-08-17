@@ -1,0 +1,31 @@
+apiVersion: v3.1.0
+kind: DataContract
+name: certification-run
+version: 1.0.0
+status: active
+domain: platform-governance
+description: Immutable release-candidate gate results and content-addressed evidence.
+schema:
+  - {name: certification_run_id, type: string, required: true}
+  - {name: release_candidate, type: string, required: true}
+  - {name: candidate_sha, type: string, required: true}
+  - {name: registry_checksum, type: string, required: true}
+  - {name: gate_id, type: string, required: true}
+  - {name: wave, type: string, required: true}
+  - {name: environment, type: string, required: true}
+  - {name: attempt, type: long, required: true}
+  - {name: status, type: string, required: true}
+  - {name: evidence_uri, type: string, required: false}
+  - {name: evidence_sha256, type: string, required: false}
+  - {name: tool_versions, type: map<string,string>, required: true}
+  - {name: started_at, type: timestamp_tz, required: true}
+  - {name: completed_at, type: timestamp_tz, required: false}
+  - {name: approver_ids, type: array<string>, required: true}
+quality:
+  - rule: required missing gates resolve to BLOCKED
+  - rule: PASS and FAIL require evidence URI and SHA-256
+  - rule: attempts are append-only and monotonic
+governance:
+  appendOnly: true
+  missingGateStatus: BLOCKED
+  evidenceRetentionDays: 2555

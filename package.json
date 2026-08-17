@@ -1,0 +1,6 @@
+{
+  "name": "taxflow360",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["apps/control-tower"]
+}

@@ -1,0 +1,34 @@
+resources:
+  pipelines:
+    taxflow_simulator:
+      name: taxflow-${bundle.target}-tax-simulator
+      catalog: ${var.catalog}
+      target: taxflow_simulation
+      channel: CURRENT
+      edition: ADVANCED
+      photon: true
+      serverless: true
+      continuous: false
+      libraries:
+        - pypi:
+            package: PyYAML==6.0.2
+        - file:
+            path: ../src/tax_rule_catalog.py
+        - file:
+            path: ../src/gold_simulator.py
+      configuration:
+        taxflow.tax_catalog_path: /Volumes/${var.catalog}/taxflow_config/governance/tax-rule-catalog.yaml
+        taxflow.source_authorities_path: /Volumes/${var.catalog}/taxflow_config/governance/official-source-authorities.yaml
+        taxflow.simulation_source_table: ${var.catalog}.taxflow.silver_transactions
+        pipelines.clusterShutdown.delay: 0s
+  jobs:
+    taxflow_batch_simulator:
+      name: taxflow-${bundle.target}-tax-simulator
+      max_concurrent_runs: 1
+      queue:
+        enabled: true
+      tasks:
+        - task_key: publish_simulation_snapshot
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.taxflow_simulator.id}
+            full_refresh: false

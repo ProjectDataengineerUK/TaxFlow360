@@ -1,0 +1,13 @@
+cases:
+  - id: matched
+    amounts: {fiscal: '100.00', erp: '100.00', payment: '100.00', split: '100.00'}
+    expected: MATCHED
+  - id: rounding
+    amounts: {fiscal: '100.00', erp: '100.01', payment: '100.00', split: '100.00'}
+    expected: MATCHED_WITH_TOLERANCE
+  - id: mismatch
+    amounts: {fiscal: '100.00', erp: '101.00', payment: '100.00', split: '100.00'}
+    expected: DIVERGENT
+  - id: missing
+    amounts: {fiscal: '100.00', erp: '100.00', payment: null, split: null}
+    expected: DIVERGENT

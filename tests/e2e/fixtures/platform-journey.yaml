@@ -1,0 +1,18 @@
+version: 1.0.0
+logicalCutoff: '2026-08-17T00:00:00Z'
+tenants:
+  - tenantId: 11111111-1111-4111-8111-111111111111
+    companyTaxId: '12345678000199'
+    transactionId: TX-BR-2026-000001
+    operationAmount: '1000.00'
+    sources: {fiscal: '1000.00', erp: '1000.00', payment: '1000.00', split: '1000.00'}
+  - tenantId: 22222222-2222-4222-8222-222222222222
+    companyTaxId: '98765432000188'
+    transactionId: TX-BR-2026-000002
+    operationAmount: '2000.00'
+    sources: {fiscal: '2000.00', erp: '2000.00', payment: '1990.00', split: '2000.00'}
+expectedProducts: [ingestion, readiness, tax_simulation, digital_twin, shadow_tax, regulatory_ai]
+officialSource:
+  id: ec132-2023-art156a
+  url: https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc132.htm
+  contentSha256: 1321321321321321321321321321321321321321321321321321321321321321

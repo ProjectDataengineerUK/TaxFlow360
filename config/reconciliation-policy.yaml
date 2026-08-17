@@ -1,0 +1,19 @@
+version: 1.0.0
+status: approved
+effectiveFrom: '2026-08-17T00:00:00Z'
+watermarkHours: 24
+tolerances:
+  - divergenceType: amount
+    currency: BRL
+    paymentMethod: any
+    absolute: '0.01'
+materiality:
+  review: '100.00'
+  high: '1000.00'
+  critical: '10000.00'
+workflow:
+  criticalRequiresHumanReview: true
+  autoCloseCritical: false
+approval:
+  preparedBy: synthetic-policy-author
+  approvedBy: synthetic-policy-reviewer

@@ -1,0 +1,31 @@
+resources:
+  pipelines:
+    taxflow_medallion:
+      name: taxflow-${bundle.target}-medallion
+      catalog: ${var.catalog}
+      target: taxflow
+      continuous: false
+      channel: CURRENT
+      photon: true
+      serverless: true
+      edition: ADVANCED
+      libraries:
+        - file:
+            path: ../src/bronze.py
+        - file:
+            path: ../src/silver.py
+        - file:
+            path: ../src/gold_readiness.py
+        - file:
+            path: ../src/gold_simulator.py
+        - file:
+            path: ../src/gold_digital_twin.py
+        - file:
+            path: ../src/gold_shadow_tax.py
+        - file:
+            path: ../src/regulatory_ai.py
+      configuration:
+        taxflow.source_path: ${var.source_path}
+        taxflow.checkpoint_path: ${var.checkpoint_path}
+        taxflow.pii_salt: "{{secrets/taxflow/pii-salt}}"
+        pipelines.clusterShutdown.delay: 0s

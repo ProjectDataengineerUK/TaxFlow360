@@ -1,0 +1,61 @@
+apiVersion: v3.1.0
+kind: DataContract
+metadata:
+  name: tax-simulation
+  version: 1.0.0
+  description: Immutable deterministic current-regime, CBS/IBS and split-payment simulation result
+  owner: tax-platform
+  domain: tax-simulation
+  classification: confidential
+schema:
+  type: table
+  columns:
+    - {name: simulation_id, type: string, required: true, unique: true}
+    - {name: predecessor_simulation_id, type: string, required: false}
+    - {name: tenant_id, type: string, required: true}
+    - {name: company_tax_id, type: string, required: true, classification: pii}
+    - {name: tax_transaction_id, type: string, required: true}
+    - {name: cutoff_at, type: timestamp_tz, required: true}
+    - {name: calculated_at, type: timestamp_tz, required: true}
+    - {name: rule_set_version, type: string, required: true}
+    - {name: input_fingerprint, type: string, required: true}
+    - {name: currency, type: string, required: true, constraints: {const: BRL}}
+    - name: scenarios
+      type: array<struct<scenario:string,total_tax:decimal(20,2),company_amount:decimal(20,2),authority_amount:decimal(20,2),components:array<struct<component:string,base:decimal(20,2),rate:decimal(12,8),amount:decimal(20,2),rule_id:string,source_ids:array<string>>>>>
+      required: true
+      constraints: {minItems: 1, maxItems: 3, uniqueBy: scenario}
+    - name: calculation_memory
+      type: array<struct<sequence:integer,scenario:string,component:string,formula:string,inputs:map<string,string>,unrounded_value:string,rounded_value:decimal(20,2),rounding_mode:string,rule_id:string>>
+      required: true
+    - name: official_sources
+      type: array<struct<source_id:string,source_url:string,authority:string,document_id:string,provision:string,publication_date:date,captured_at:timestamp_tz,content_sha256:string,status:string>>
+      required: true
+      constraints: {minItems: 1, uniqueBy: source_id}
+quality:
+  completeness: {simulation_id: 1.0, tenant_id: 1.0, rule_set_version: 1.0, scenarios: 1.0, calculation_memory: 1.0, official_sources: 1.0}
+  uniqueness: {simulation_id: 1.0, input_fingerprint: 1.0}
+  invariants:
+    - each applied rule references at least one validated official source
+    - scenario totals equal the sum of rounded component amounts
+    - split company amount plus authority amount equals operation amount
+    - identical fingerprint and rule snapshot produce identical results
+lineage:
+  inputs:
+    - {name: canonical-transaction, contract: tax-transaction@1.0.0}
+    - {name: approved-rule-snapshot, config: tax-rule-catalog@1.0.0}
+  outputs: [gold_tax_simulation, gold_tax_simulation_source]
+sla: {availability: 99.9%, synchronous_latency: PT2S, batch_latency: PT15M}
+evolution:
+  compatibility: backward
+  immutable_results: true
+  formula_or_rate_change: new rule-set version required
+governance:
+  tenant_isolation: required
+  official_result_requires_approved_rules: true
+  source_allowlist_required: true
+  runtime_source_fetch: prohibited
+  retention: P7Y
+consumers:
+  - {name: simulation-query-api, owner: platform-engineering, usage: tenant-scoped result and comparison}
+  - {name: control-tower, owner: product-simulation, usage: scenarios, deltas, memory and clickable sources}
+  - {name: batch-simulator, owner: platform-data, usage: deterministic 100k-operation simulation}

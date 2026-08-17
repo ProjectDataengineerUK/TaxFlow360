@@ -1,0 +1,62 @@
+version: 1.0.0
+status: approved
+sessionOnly: true
+cacheRootVariable: TAXFLOW_TOOL_CACHE
+downloadTimeoutSeconds: 120
+evidenceDirectory: .local-evidence/runtime
+allowedTerraformCommands: [version, fmt, validate, test]
+approval:
+  preparedBy: platform-toolchain-a
+  approvedBy: security-toolchain-b
+tools:
+  - id: java
+    version: 21.0.5+11
+    officialHosts: [github.com, objects.githubusercontent.com]
+    archiveUrl: https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.5%2B11/OpenJDK21U-jdk_x64_windows_hotspot_21.0.5_11.zip
+    sha256: 6f09d4a3598542313cca1540106d537c7092a54e415d569f7b928160a90d3128
+    maxArchiveBytes: 250000000
+    archiveRoot: jdk-21.0.5+11
+    executable: bin/java.exe
+    versionArgs: [-version]
+    versionPattern: '21\.0\.5'
+  - id: node
+    version: 22.14.0
+    officialHosts: [nodejs.org]
+    archiveUrl: https://nodejs.org/download/release/v22.14.0/node-v22.14.0-win-x64.zip
+    sha256: 55b639295920b219bb2acbcfa00f90393a2789095b7323f79475c9f34795f217
+    maxArchiveBytes: 50000000
+    archiveRoot: node-v22.14.0-win-x64
+    executable: node.exe
+    versionArgs: [--version]
+    versionPattern: '^v22\.14\.0$'
+  - id: terraform
+    version: 1.10.5
+    officialHosts: [releases.hashicorp.com]
+    archiveUrl: https://releases.hashicorp.com/terraform/1.10.5/terraform_1.10.5_windows_amd64.zip
+    sha256: 4e2c6b7232aa30026baf9fe575f1bf4006c2a0cbbcdcbd244573dc188b439239
+    maxArchiveBytes: 40000000
+    archiveRoot: ''
+    executable: terraform.exe
+    versionArgs: [version]
+    versionPattern: '^Terraform v1\.10\.5'
+  - id: databricks
+    version: 0.240.0
+    officialHosts: [github.com, objects.githubusercontent.com]
+    archiveUrl: https://github.com/databricks/cli/releases/download/v0.240.0/databricks_cli_0.240.0_windows_amd64-signed.zip
+    sha256: 62ac2b9e5a7723096020f5876194810d045e173be9ba65ffb3d67a12c4422543
+    maxArchiveBytes: 15000000
+    archiveRoot: ''
+    executable: databricks.exe
+    versionArgs: [version]
+    versionPattern: '0\.240\.0'
+  - id: gradle-wrapper
+    version: 8.12.1
+    officialHosts: [raw.githubusercontent.com]
+    archiveUrl: https://raw.githubusercontent.com/gradle/gradle/v8.12.1/gradle/wrapper/gradle-wrapper.jar
+    sha256: 2db75c40782f5e8ba1fc278a5574bab070adccb2d21ca5a6e5ed840888448046
+    maxArchiveBytes: 100000
+    archiveRoot: ''
+    executable: gradle-wrapper.jar
+    versionArgs: []
+    versionPattern: '8\.12\.1'
+    repositoryTarget: gradle/wrapper/gradle-wrapper.jar

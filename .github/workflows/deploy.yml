@@ -1,0 +1,35 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options: [dev, staging, production]
+        required: true
+      cloud:
+        type: choice
+        options: [aws, azure, gcp]
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-${{ inputs.environment }}-${{ inputs.cloud }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform -chdir=deploy/terraform/${{ inputs.cloud }} init -backend=false
+      - run: terraform -chdir=deploy/terraform/${{ inputs.cloud }} validate
+      - run: terraform -chdir=deploy/terraform/${{ inputs.cloud }} plan -lock=false
+      - uses: databricks/setup-cli@main
+      - run: databricks bundle validate -t ${{ inputs.environment }}
+        working-directory: data/databricks

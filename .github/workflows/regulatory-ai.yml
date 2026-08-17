@@ -1,0 +1,22 @@
+name: regulatory-ai
+on:
+  pull_request:
+    paths: ['services/regulatory-service/**','data/databricks/**','contracts/**','config/regulatory-*.yaml','tests/regulatory/**','tests/security/test_regulatory_ai_security.py','deploy/terraform/**']
+  workflow_dispatch:
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install pytest pydantic fastapi pyyaml httpx
+      - run: PYTHONPATH=services/regulatory-service/src:data/databricks/src pytest tests/regulatory tests/security/test_regulatory_ai_security.py tests/performance/test_regulatory_100k.py
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform fmt -check -recursive deploy/terraform
+      - run: terraform test
+        working-directory: deploy/terraform

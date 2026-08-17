@@ -1,0 +1,706 @@
+version: 1.0.0
+synthetic: true
+rule_set_version: 1.0.0
+rounding: {scale: 2, mode: HALF_EVEN}
+cases:
+  - id: sim-001
+    description: Synthetic current calculation for BRL 0.00
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.00"
+    scenario: current
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.00"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.00", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-002
+    description: Synthetic reform calculation for BRL 0.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.00"
+    scenario: reform
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.00"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.00", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-003
+    description: Synthetic split calculation for BRL 0.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.00"
+    scenario: split
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.00"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.00", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-004
+    description: Synthetic current calculation for BRL 0.01
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.01"
+    scenario: current
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.01"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.00", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-005
+    description: Synthetic reform calculation for BRL 0.01
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.01"
+    scenario: reform
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.01"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.00", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-006
+    description: Synthetic split calculation for BRL 0.01
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.01"
+    scenario: split
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.01"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.00", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-007
+    description: Synthetic current calculation for BRL 0.02
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.02"
+    scenario: current
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.02"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.00", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-008
+    description: Synthetic reform calculation for BRL 0.02
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.02"
+    scenario: reform
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.02"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.00", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-009
+    description: Synthetic split calculation for BRL 0.02
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.02"
+    scenario: split
+    expected:
+      total_tax: "0.00"
+      authority_amount: "0.00"
+      company_amount: "0.02"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.00", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-010
+    description: Synthetic current calculation for BRL 0.03
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.03"
+    scenario: current
+    expected:
+      total_tax: "0.01"
+      authority_amount: "0.00"
+      company_amount: "0.03"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.01", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-011
+    description: Synthetic reform calculation for BRL 0.03
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.03"
+    scenario: reform
+    expected:
+      total_tax: "0.01"
+      authority_amount: "0.00"
+      company_amount: "0.03"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.01", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-012
+    description: Synthetic split calculation for BRL 0.03
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.03"
+    scenario: split
+    expected:
+      total_tax: "0.01"
+      authority_amount: "0.01"
+      company_amount: "0.02"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.01", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-013
+    description: Synthetic current calculation for BRL 0.05
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.05"
+    scenario: current
+    expected:
+      total_tax: "0.01"
+      authority_amount: "0.00"
+      company_amount: "0.05"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.01", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-014
+    description: Synthetic reform calculation for BRL 0.05
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.05"
+    scenario: reform
+    expected:
+      total_tax: "0.01"
+      authority_amount: "0.00"
+      company_amount: "0.05"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.01", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-015
+    description: Synthetic split calculation for BRL 0.05
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.05"
+    scenario: split
+    expected:
+      total_tax: "0.01"
+      authority_amount: "0.01"
+      company_amount: "0.04"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.00", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.01", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-016
+    description: Synthetic current calculation for BRL 0.10
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.10"
+    scenario: current
+    expected:
+      total_tax: "0.02"
+      authority_amount: "0.00"
+      company_amount: "0.10"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.02", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-017
+    description: Synthetic reform calculation for BRL 0.10
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.10"
+    scenario: reform
+    expected:
+      total_tax: "0.03"
+      authority_amount: "0.00"
+      company_amount: "0.10"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.01", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.02", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-018
+    description: Synthetic split calculation for BRL 0.10
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.10"
+    scenario: split
+    expected:
+      total_tax: "0.03"
+      authority_amount: "0.03"
+      company_amount: "0.07"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.01", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.02", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-019
+    description: Synthetic current calculation for BRL 0.15
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.15"
+    scenario: current
+    expected:
+      total_tax: "0.03"
+      authority_amount: "0.00"
+      company_amount: "0.15"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.03", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-020
+    description: Synthetic reform calculation for BRL 0.15
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.15"
+    scenario: reform
+    expected:
+      total_tax: "0.04"
+      authority_amount: "0.00"
+      company_amount: "0.15"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.01", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.03", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-021
+    description: Synthetic split calculation for BRL 0.15
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.15"
+    scenario: split
+    expected:
+      total_tax: "0.04"
+      authority_amount: "0.04"
+      company_amount: "0.11"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.01", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.03", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-022
+    description: Synthetic current calculation for BRL 0.25
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.25"
+    scenario: current
+    expected:
+      total_tax: "0.04"
+      authority_amount: "0.00"
+      company_amount: "0.25"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.04", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-023
+    description: Synthetic reform calculation for BRL 0.25
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.25"
+    scenario: reform
+    expected:
+      total_tax: "0.06"
+      authority_amount: "0.00"
+      company_amount: "0.25"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.02", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.04", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-024
+    description: Synthetic split calculation for BRL 0.25
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.25"
+    scenario: split
+    expected:
+      total_tax: "0.06"
+      authority_amount: "0.06"
+      company_amount: "0.19"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.02", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.04", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-025
+    description: Synthetic current calculation for BRL 0.50
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.50"
+    scenario: current
+    expected:
+      total_tax: "0.09"
+      authority_amount: "0.00"
+      company_amount: "0.50"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.09", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-026
+    description: Synthetic reform calculation for BRL 0.50
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.50"
+    scenario: reform
+    expected:
+      total_tax: "0.13"
+      authority_amount: "0.00"
+      company_amount: "0.50"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.04", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.09", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-027
+    description: Synthetic split calculation for BRL 0.50
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.50"
+    scenario: split
+    expected:
+      total_tax: "0.13"
+      authority_amount: "0.13"
+      company_amount: "0.37"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.04", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.09", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-028
+    description: Synthetic current calculation for BRL 0.99
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "0.99"
+    scenario: current
+    expected:
+      total_tax: "0.18"
+      authority_amount: "0.00"
+      company_amount: "0.99"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.18", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-029
+    description: Synthetic reform calculation for BRL 0.99
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.99"
+    scenario: reform
+    expected:
+      total_tax: "0.27"
+      authority_amount: "0.00"
+      company_amount: "0.99"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.09", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.18", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-030
+    description: Synthetic split calculation for BRL 0.99
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "0.99"
+    scenario: split
+    expected:
+      total_tax: "0.27"
+      authority_amount: "0.27"
+      company_amount: "0.72"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.09", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.18", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-031
+    description: Synthetic current calculation for BRL 1.00
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "1.00"
+    scenario: current
+    expected:
+      total_tax: "0.18"
+      authority_amount: "0.00"
+      company_amount: "1.00"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.18", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-032
+    description: Synthetic reform calculation for BRL 1.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "1.00"
+    scenario: reform
+    expected:
+      total_tax: "0.27"
+      authority_amount: "0.00"
+      company_amount: "1.00"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.09", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.18", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-033
+    description: Synthetic split calculation for BRL 1.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "1.00"
+    scenario: split
+    expected:
+      total_tax: "0.27"
+      authority_amount: "0.27"
+      company_amount: "0.73"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.09", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.18", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-034
+    description: Synthetic current calculation for BRL 1.01
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "1.01"
+    scenario: current
+    expected:
+      total_tax: "0.18"
+      authority_amount: "0.00"
+      company_amount: "1.01"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.18", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-035
+    description: Synthetic reform calculation for BRL 1.01
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "1.01"
+    scenario: reform
+    expected:
+      total_tax: "0.27"
+      authority_amount: "0.00"
+      company_amount: "1.01"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.09", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.18", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-036
+    description: Synthetic split calculation for BRL 1.01
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "1.01"
+    scenario: split
+    expected:
+      total_tax: "0.27"
+      authority_amount: "0.27"
+      company_amount: "0.74"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.09", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.18", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-037
+    description: Synthetic current calculation for BRL 2.50
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "2.50"
+    scenario: current
+    expected:
+      total_tax: "0.45"
+      authority_amount: "0.00"
+      company_amount: "2.50"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "0.45", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-038
+    description: Synthetic reform calculation for BRL 2.50
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "2.50"
+    scenario: reform
+    expected:
+      total_tax: "0.66"
+      authority_amount: "0.00"
+      company_amount: "2.50"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.22", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.44", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-039
+    description: Synthetic split calculation for BRL 2.50
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "2.50"
+    scenario: split
+    expected:
+      total_tax: "0.66"
+      authority_amount: "0.66"
+      company_amount: "1.84"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.22", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "0.44", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-040
+    description: Synthetic current calculation for BRL 10.00
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "10.00"
+    scenario: current
+    expected:
+      total_tax: "1.80"
+      authority_amount: "0.00"
+      company_amount: "10.00"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "1.80", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-041
+    description: Synthetic reform calculation for BRL 10.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "10.00"
+    scenario: reform
+    expected:
+      total_tax: "2.65"
+      authority_amount: "0.00"
+      company_amount: "10.00"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.88", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "1.77", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-042
+    description: Synthetic split calculation for BRL 10.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "10.00"
+    scenario: split
+    expected:
+      total_tax: "2.65"
+      authority_amount: "2.65"
+      company_amount: "7.35"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "0.88", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "1.77", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-043
+    description: Synthetic current calculation for BRL 19.99
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "19.99"
+    scenario: current
+    expected:
+      total_tax: "3.60"
+      authority_amount: "0.00"
+      company_amount: "19.99"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "3.60", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-044
+    description: Synthetic reform calculation for BRL 19.99
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "19.99"
+    scenario: reform
+    expected:
+      total_tax: "5.30"
+      authority_amount: "0.00"
+      company_amount: "19.99"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "1.76", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "3.54", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-045
+    description: Synthetic split calculation for BRL 19.99
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "19.99"
+    scenario: split
+    expected:
+      total_tax: "5.30"
+      authority_amount: "5.30"
+      company_amount: "14.69"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "1.76", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "3.54", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-046
+    description: Synthetic current calculation for BRL 100.00
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "100.00"
+    scenario: current
+    expected:
+      total_tax: "18.00"
+      authority_amount: "0.00"
+      company_amount: "100.00"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "18.00", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-047
+    description: Synthetic reform calculation for BRL 100.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "100.00"
+    scenario: reform
+    expected:
+      total_tax: "26.50"
+      authority_amount: "0.00"
+      company_amount: "100.00"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "8.80", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "17.70", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-048
+    description: Synthetic split calculation for BRL 100.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "100.00"
+    scenario: split
+    expected:
+      total_tax: "26.50"
+      authority_amount: "26.50"
+      company_amount: "73.50"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "8.80", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "17.70", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-049
+    description: Synthetic current calculation for BRL 999.99
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "999.99"
+    scenario: current
+    expected:
+      total_tax: "180.00"
+      authority_amount: "0.00"
+      company_amount: "999.99"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "180.00", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-050
+    description: Synthetic reform calculation for BRL 999.99
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "999.99"
+    scenario: reform
+    expected:
+      total_tax: "265.00"
+      authority_amount: "0.00"
+      company_amount: "999.99"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "88.00", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "177.00", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-051
+    description: Synthetic split calculation for BRL 999.99
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "999.99"
+    scenario: split
+    expected:
+      total_tax: "265.00"
+      authority_amount: "265.00"
+      company_amount: "734.99"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "88.00", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "177.00", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-052
+    description: Synthetic current calculation for BRL 1000.00
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "1000.00"
+    scenario: current
+    expected:
+      total_tax: "180.00"
+      authority_amount: "0.00"
+      company_amount: "1000.00"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "180.00", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-053
+    description: Synthetic reform calculation for BRL 1000.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "1000.00"
+    scenario: reform
+    expected:
+      total_tax: "265.00"
+      authority_amount: "0.00"
+      company_amount: "1000.00"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "88.00", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "177.00", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-054
+    description: Synthetic split calculation for BRL 1000.00
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "1000.00"
+    scenario: split
+    expected:
+      total_tax: "265.00"
+      authority_amount: "265.00"
+      company_amount: "735.00"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "88.00", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "177.00", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-055
+    description: Synthetic current calculation for BRL 12345.67
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "12345.67"
+    scenario: current
+    expected:
+      total_tax: "2222.22"
+      authority_amount: "0.00"
+      company_amount: "12345.67"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "2222.22", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-056
+    description: Synthetic reform calculation for BRL 12345.67
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "12345.67"
+    scenario: reform
+    expected:
+      total_tax: "3271.60"
+      authority_amount: "0.00"
+      company_amount: "12345.67"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "1086.42", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "2185.18", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-057
+    description: Synthetic split calculation for BRL 12345.67
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "12345.67"
+    scenario: split
+    expected:
+      total_tax: "3271.60"
+      authority_amount: "3271.60"
+      company_amount: "9074.07"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "1086.42", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "2185.18", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-058
+    description: Synthetic current calculation for BRL 999999.99
+    occurred_at: "2026-06-15T12:00:00Z"
+    operation_amount: "999999.99"
+    scenario: current
+    expected:
+      total_tax: "180000.00"
+      authority_amount: "0.00"
+      company_amount: "999999.99"
+      components:
+        - {component: CURRENT, rate: "0.1800", amount: "180000.00", rule_id: current-general-2026, source_ids: [ec132-2023-art156a]}
+  - id: sim-059
+    description: Synthetic reform calculation for BRL 999999.99
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "999999.99"
+    scenario: reform
+    expected:
+      total_tax: "265000.00"
+      authority_amount: "0.00"
+      company_amount: "999999.99"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "88000.00", rule_id: cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "177000.00", rule_id: ibs-general-2027, source_ids: [ec132-2023-art156a]}
+  - id: sim-060
+    description: Synthetic split calculation for BRL 999999.99
+    occurred_at: "2027-06-15T12:00:00Z"
+    operation_amount: "999999.99"
+    scenario: split
+    expected:
+      total_tax: "265000.00"
+      authority_amount: "265000.00"
+      company_amount: "734999.99"
+      components:
+        - {component: CBS, rate: "0.0880", amount: "88000.00", rule_id: split-cbs-general-2027, source_ids: [ec132-2023-art156a]}
+        - {component: IBS, rate: "0.1770", amount: "177000.00", rule_id: split-ibs-general-2027, source_ids: [ec132-2023-art156a]}
+

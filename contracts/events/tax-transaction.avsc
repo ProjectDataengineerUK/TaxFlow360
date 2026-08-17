@@ -1,0 +1,22 @@
+{
+  "type": "record",
+  "name": "TaxTransactionEvent",
+  "namespace": "com.taxflow360.events.v1",
+  "doc": "Canonical immutable event for a fiscal or financial transaction.",
+  "fields": [
+    {"name": "event_id", "type": {"type": "string", "logicalType": "uuid"}},
+    {"name": "tax_transaction_id", "type": "string"},
+    {"name": "tenant_id", "type": {"type": "string", "logicalType": "uuid"}},
+    {"name": "company_tax_id", "type": "string"},
+    {"name": "source_system", "type": "string"},
+    {"name": "source_event_id", "type": "string"},
+    {"name": "occurred_at", "type": {"type": "long", "logicalType": "timestamp-millis"}},
+    {"name": "operation_amount", "type": {"type": "bytes", "logicalType": "decimal", "precision": 20, "scale": 2}},
+    {"name": "currency", "type": "string"},
+    {"name": "correlation_id", "type": "string"},
+    {"name": "ingested_at", "type": {"type": "long", "logicalType": "timestamp-millis"}},
+    {"name": "document_type", "type": ["null", "string"], "default": null},
+    {"name": "document_key", "type": ["null", "string"], "default": null},
+    {"name": "schema_version", "type": "string", "default": "1.0.0"}
+  ]
+}

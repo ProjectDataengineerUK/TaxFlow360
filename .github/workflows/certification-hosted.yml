@@ -1,0 +1,36 @@
+name: certification-hosted
+on: {workflow_dispatch: {inputs: {candidate_sha: {required: true, type: string}, logical_cutoff: {required: true, type: string}, apply_cloud: {required: false, type: boolean, default: false}}}}
+permissions: {contents: read, id-token: write}
+concurrency: {group: 'certification-${{ inputs.candidate_sha }}', cancel-in-progress: false}
+jobs:
+  cloud-plans:
+    strategy: {fail-fast: false, matrix: {cloud: [aws, azure, gcp]}}
+    runs-on: ubuntu-latest
+    environment: certification
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: {terraform_version: '1.10.5'}
+      - run: terraform fmt -check -recursive deploy/terraform
+      - run: terraform -chdir=deploy/terraform/${{ matrix.cloud }} init -backend=false
+      - run: terraform -chdir=deploy/terraform/${{ matrix.cloud }} validate
+      - run: terraform -chdir=deploy/terraform/tests test
+  databricks:
+    runs-on: ubuntu-latest
+    environment: databricks-certification
+    steps:
+      - uses: actions/checkout@v4
+      - uses: databricks/setup-cli@main
+      - run: databricks bundle validate -t staging
+        working-directory: data/databricks
+      - run: databricks bundle run platform_certification -t staging --params candidate_sha=${{ inputs.candidate_sha }},logical_cutoff=${{ inputs.logical_cutoff }}
+        working-directory: data/databricks
+  e2e-security:
+    runs-on: ubuntu-latest
+    environment: certification
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.8'}
+      - run: pip install -r constraints-certification.txt
+      - run: PYTHONPATH=services/query-service/src:services/regulatory-service/src:data/databricks/src:tools/certification/src pytest tests/e2e tests/conformance tests/resilience tests/security -q

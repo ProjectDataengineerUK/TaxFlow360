@@ -1,0 +1,62 @@
+apiVersion: v3.1.0
+kind: DataContract
+name: shadow-tax-divergence
+version: 1.0.0
+status: active
+domain: reconciliation
+description: Immutable, tenant-scoped Shadow Tax reconciliation and divergence versions.
+schema:
+  - name: reconciliation_id
+    type: string
+    required: true
+  - name: version
+    type: long
+    required: true
+  - name: tenant_id
+    type: string
+    required: true
+    classification: confidential
+  - name: company_tax_id
+    type: string
+    required: true
+    classification: restricted
+  - name: tax_transaction_id
+    type: string
+    required: true
+  - name: status
+    type: string
+    required: true
+  - name: divergence_type
+    type: string
+    required: false
+  - name: severity
+    type: string
+    required: false
+  - name: absolute_difference
+    type: decimal(20,2)
+    required: true
+  - name: tolerance_version
+    type: string
+    required: true
+  - name: logical_cutoff_at
+    type: timestamp_tz
+    required: true
+  - name: source_event_ids
+    type: array<string>
+    required: true
+  - name: simulation_ids
+    type: array<string>
+    required: true
+  - name: official_source_ids
+    type: array<string>
+    required: true
+quality:
+  - rule: tenant_id is not null
+  - rule: version > 0
+  - rule: critical divergences require pending human review
+  - rule: tax divergences require simulation and official source identifiers
+sla:
+  freshness: PT5M
+governance:
+  appendOnly: true
+  isolationKeys: [tenant_id, company_tax_id]

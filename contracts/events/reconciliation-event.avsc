@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "ReconciliationEvent",
+  "namespace": "taxflow.reconciliation.v1",
+  "fields": [
+    {"name":"eventId","type":"string"},
+    {"name":"eventVersion","type":"long"},
+    {"name":"tenantId","type":"string"},
+    {"name":"companyTaxId","type":"string"},
+    {"name":"taxTransactionId","type":"string"},
+    {"name":"source","type":{"type":"enum","name":"Source","symbols":["FISCAL","ERP","PAYMENT","SPLIT","TAX"]}},
+    {"name":"eventTime","type":{"type":"long","logicalType":"timestamp-millis"}},
+    {"name":"currency","type":"string","default":"BRL"},
+    {"name":"amount","type":["null",{"type":"bytes","logicalType":"decimal","precision":20,"scale":2}],"default":null},
+    {"name":"payloadSha256","type":"string"}
+  ]
+}

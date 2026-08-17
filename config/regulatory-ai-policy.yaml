@@ -1,0 +1,27 @@
+version: 1.0.0
+status: approved
+retrieval:
+  mode: hybrid
+  topK: 10
+  maxContextChunks: 5
+  mandatoryFilters: [authority_id, document_type, jurisdiction, cutoff_at]
+citations:
+  requiredPerRegulatoryClaim: 1
+  allowModelProvidedUrls: false
+  unsupportedClaimAction: refuse
+tools:
+  allowlist: [search_public_corpus, read_authorized_taxflow_metrics, create_change_draft]
+  productiveRuleWriteAllowed: false
+security:
+  retrievedContentIsUntrusted: true
+  redirectsAllowed: false
+  privateNetworkTargetsAllowed: false
+workflow:
+  fourEyesRequired: true
+  aiCanApprove: false
+  aiCanPublish: false
+model:
+  temperature: '0'
+approval:
+  preparedBy: ai-governance-a
+  approvedBy: ai-governance-b

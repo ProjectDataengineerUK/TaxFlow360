@@ -1,0 +1,69 @@
+apiVersion: v3.1.0
+kind: DataContract
+metadata:
+  name: digital-twin-projection
+  version: 1.0.0
+  description: Immutable daily cash, tax-float and working-capital projection with driver evidence
+  owner: treasury-analytics
+  domain: digital-twin
+  classification: confidential
+schema:
+  type: table
+  grain: one row per tenant, company, projection, scenario and calendar day
+  columns:
+    - {name: projection_id, type: string, required: true}
+    - {name: tenant_id, type: string, required: true}
+    - {name: company_tax_id, type: string, required: true, classification: pii}
+    - {name: scenario_id, type: string, required: true}
+    - {name: projection_date, type: date, required: true}
+    - {name: cutoff_at, type: timestamp_tz, required: true}
+    - {name: published_at, type: timestamp_tz, required: true}
+    - {name: horizon_days, type: integer, required: true, constraints: {enum: [30, 90, 180, 365]}}
+    - {name: assumption_version, type: string, required: true}
+    - {name: assumption_checksum, type: string, required: true, constraints: {pattern: "^[a-f0-9]{64}$"}}
+    - {name: model_mode, type: string, required: true, constraints: {enum: [deterministic_baseline, promoted_forecast]}}
+    - {name: model_version, type: string, required: false}
+    - {name: opening_cash, type: decimal(20,2), required: true}
+    - {name: inflow, type: decimal(20,2), required: true}
+    - {name: outflow, type: decimal(20,2), required: true}
+    - {name: tax_split_outflow, type: decimal(20,2), required: true}
+    - {name: closing_cash, type: decimal(20,2), required: true}
+    - {name: minimum_cash, type: decimal(20,2), required: true}
+    - {name: liquidity_gap, type: decimal(20,2), required: true, constraints: {minimum: 0}}
+    - {name: tax_float_delta, type: decimal(20,2), required: true}
+    - {name: cumulative_working_capital_need, type: decimal(20,2), required: true, constraints: {minimum: 0}}
+    - name: evidence
+      type: array<struct<evidence_id:string,evidence_type:string,driver:string,source_dataset:string,source_record_id:string,simulation_id:string,rule_id:string,source_ids:array<string>,observed_value:string,contribution:string>>
+      required: true
+    - name: model_evidence
+      type: struct<training_window_start:date,training_window_end:date,mape:string,absolute_bias:string,interval_coverage:string,promotion_actor:string,fallback_reason:string>
+      required: true
+quality:
+  uniqueness: {projection_id,scenario_id,projection_date: 1.0}
+  completeness: {projection_id: 1.0, tenant_id: 1.0, projection_date: 1.0, closing_cash: 1.0, evidence: 1.0}
+  invariants:
+    - opening_cash + inflow - outflow - tax_split_outflow equals closing_cash exactly
+    - every calendar day in the selected horizon is present
+    - liquidity_gap equals max(0, minimum_cash - closing_cash)
+    - tax evidence inherits simulation_id, rule_id and source_id lineage
+    - projection and assumption snapshots are append-only
+lineage:
+  inputs:
+    - {name: canonical-finance-silver, contract: tax-transaction@1.0.0}
+    - {name: published-tax-simulation, contract: tax-simulation@1.0.0}
+    - {name: scenario-policy, config: digital-twin-scenarios@1.0.0}
+  outputs: [gold_digital_twin_daily, gold_digital_twin_summary, gold_digital_twin_evidence]
+sla: {availability: 99.9%, latency: PT15M}
+evolution:
+  compatibility: backward
+  immutable_projections: true
+  decimal_type_change: major_version_required
+governance:
+  tenant_isolation: required
+  assumption_override_audit: required
+  tax_citations_inherited: required
+  arbitrary_source_urls: prohibited
+  retention: P7Y
+consumers:
+  - {name: digital-twin-query-api, owner: platform-engineering, usage: latest, history, curve and comparison}
+  - {name: control-tower, owner: treasury-product, usage: liquidity curve, gaps, stresses and evidence}

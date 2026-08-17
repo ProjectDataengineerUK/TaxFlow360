@@ -1,0 +1,21 @@
+resources:
+  pipelines:
+    taxflow_shadow_tax:
+      name: taxflow-${bundle.target}-shadow-tax
+      catalog: ${var.catalog}
+      target: taxflow_shadow_tax
+      channel: CURRENT
+      edition: ADVANCED
+      photon: true
+      serverless: true
+      continuous: true
+      libraries:
+        - pypi: {package: PyYAML==6.0.2}
+        - file: {path: ../src/reconciliation_policy.py}
+        - file: {path: ../src/shadow_tax_reference.py}
+        - file: {path: ../src/gold_shadow_tax.py}
+        - file: {path: ../src/shadow_tax_metrics.py}
+      configuration:
+        taxflow.shadow_tax_policy_path: /Volumes/${var.catalog}/taxflow_config/governance/reconciliation-policy.yaml
+        taxflow.shadow_tax_watermark: 24 hours
+        pipelines.clusterShutdown.delay: 0s

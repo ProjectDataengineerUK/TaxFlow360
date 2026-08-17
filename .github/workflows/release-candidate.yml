@@ -1,0 +1,16 @@
+name: release-candidate
+on: {workflow_dispatch: {inputs: {candidate_sha: {required: true, type: string}, certification_run_id: {required: true, type: string}}}}
+permissions: {contents: read, id-token: write, packages: write, attestations: write}
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    environment: release-candidate
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ inputs.candidate_sha }}'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12.8'}
+      - run: pip install -r constraints-certification.txt
+      - run: PYTHONPATH=tools/certification/src python -m taxflow_certification.cli evaluate --candidate evidence/candidate.json --results evidence/results.json --approvals evidence/approvals.json
+      - name: Block deployment from this workflow
+        run: echo 'RC attestation only; production deployment is intentionally absent.'

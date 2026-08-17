@@ -1,0 +1,137 @@
+apiVersion: v3.1.0
+kind: DataContract
+metadata:
+  name: readiness-assessment
+  version: 1.0.0
+  description: Immutable Tax Readiness assessment with dimensional scores, evidence and recommendations
+  owner: tax-governance
+  domain: tax-readiness
+  classification: confidential
+schema:
+  type: table
+  columns:
+    - name: assessment_id
+      type: string
+      required: true
+      unique: true
+    - name: tenant_id
+      type: string
+      required: true
+    - name: company_tax_id
+      type: string
+      required: true
+      classification: pii
+    - name: cutoff_at
+      type: timestamp_tz
+      required: true
+    - name: input_closed_at
+      type: timestamp_tz
+      required: true
+    - name: assessed_at
+      type: timestamp_tz
+      required: true
+    - name: published_at
+      type: timestamp_tz
+      required: false
+    - name: status
+      type: string
+      required: true
+      constraints:
+        enum: [draft, published]
+    - name: methodology_version
+      type: string
+      required: true
+      constraints:
+        pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    - name: methodology_checksum
+      type: string
+      required: true
+      constraints:
+        pattern: "^[a-f0-9]{64}$"
+    - name: overall_score
+      type: decimal(5,2)
+      required: false
+      constraints:
+        minimum: 0
+        maximum: 100
+    - name: classification
+      type: string
+      required: false
+      constraints:
+        enum: [critical, attention, progressing, ready]
+    - name: dimension_scores
+      type: array<struct<dimension:string,score:decimal(5,2)>>
+      required: true
+      constraints:
+        minItems: 8
+        maxItems: 8
+        uniqueBy: dimension
+    - name: evidence
+      type: array<struct<evidence_id:string,dimension:string,criterion_id:string,outcome:string,source_reference:string,observed_value:string,contribution:decimal(5,2)>>
+      required: true
+    - name: recommendations
+      type: array<struct<recommendation_id:string,dimension:string,severity:string,action:string,evidence_ids:array<string>>>
+      required: true
+    - name: draft_issues
+      type: array<struct<code:string,dimension:string,message:string>>
+      required: true
+    - name: evidence_count
+      type: bigint
+      required: true
+      constraints:
+        minimum: 0
+    - name: source_dataset_fingerprint
+      type: string
+      required: true
+lineage:
+  inputs:
+    - name: canonical-silver-transactions
+      contract: tax-transaction@1.0.0
+    - name: readiness-methodology
+      version: 1.0.0
+  outputs:
+    - readiness_assessment
+    - readiness_dimension_score
+    - readiness_evidence
+    - readiness_recommendation
+quality:
+  completeness:
+    assessment_id: 1.0
+    tenant_id: 1.0
+    company_tax_id: 1.0
+    methodology_version: 1.0
+    methodology_checksum: 1.0
+    dimension_scores: 1.0
+  uniqueness:
+    assessment_id: 1.0
+  invariants:
+    - exactly eight unique official dimensions per assessment
+    - overall_score and classification are absent unless status is published
+    - every score contribution references stable evidence and source lineage
+    - published results are immutable and reproducible from version and checksum
+sla:
+  availability: 99.9%
+  latency: PT15M
+  freshness: PT15M
+evolution:
+  compatibility: backward
+  deprecation_policy: 90 days with consumer impact analysis
+  dimension_change: major contract and methodology version required
+governance:
+  retention: P7Y
+  tenant_isolation: required
+  raw_sensitive_payloads: prohibited
+  publication_requires:
+    - eligible evidence in every dimension
+    - approved methodology status
+    - parity and reproducibility gates passing
+consumers:
+  - name: readiness-query-api
+    owner: platform-engineering
+    usage: tenant-scoped current and historical assessments
+  - name: control-tower
+    owner: product-readiness
+    usage: scores, risks, evidence and prioritized actions
+  - name: lakehouse-analytics
+    owner: platform-data
+    usage: immutable longitudinal readiness analysis
