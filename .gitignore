@@ -1,9 +1,91 @@
+# Secrets and local environment
 .env
-*.tfvars
-*.tfstate
-*.tfstate.*
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets.*
+
+# Operating systems and editors
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.iml
+
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
 .venv/
-node_modules/
+venv/
+env/
 .pytest_cache/
 pytest-cache-files-*/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+dist/
+build/
+*.egg-info/
+
+# Node.js / Next.js
+node_modules/
+.next/
+out/
+.turbo/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
+
+# JVM / Gradle
+.gradle/
+**/build/
+*.class
+hs_err_pid*
+
+# Terraform — keep .terraform.lock.hcl versioned
+.terraform/
+*.tfvars
+*.tfvars.json
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Databricks local state and credentials
+.databricks/
+.databrickscfg
+databricks.yml.local
+
+# TaxFlow 360 local runtime and evidence
+.local-evidence/
+.taxflow360/
+local-tool-cache/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.orig
+*.log
