@@ -4,7 +4,7 @@ Este fluxo instala versões portáteis e verificadas sem alterar o PATH permanen
 
 1. Revise `config/local-toolchains.yaml` e as origens oficiais.
 2. Execute, após aprovação de rede, `tools/preflight/bootstrap-toolchains.ps1 -Tool <nome>` para cada ferramenta.
-3. Na sessão que executará os testes, use `. tools/preflight/activate-toolchains.ps1`.
+3. Na sessão que executará os testes, use `. tools/preflight/activate-toolchains.ps1`. O script também direciona `GRADLE_USER_HOME` para `.local-evidence/gradle-home`, evitando locks no perfil global.
 4. Rode `python -m taxflow_preflight.cli detect --repository .` com `PYTHONPATH=tools/preflight/src`.
 
 O bootstrap verifica HTTPS, host permitido, tamanho, SHA-256 e travessia de caminho antes da extração. O Gradle Wrapper é o único artefato escrito no repositório. Terraform local aceita somente `version`, `fmt`, `validate` e `test`; implantação e credenciais permanecem fora do escopo.

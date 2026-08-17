@@ -14,4 +14,8 @@ foreach ($spec in $specs) {
     if ($spec.id -eq 'java') { $env:JAVA_HOME = Join-Path $base $spec.archive_root }
 }
 $env:TAXFLOW_TOOL_CACHE = [IO.Path]::GetFullPath($CacheRoot)
+$repository = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
+if (-not $env:GRADLE_USER_HOME) {
+    $env:GRADLE_USER_HOME = Join-Path $repository '.local-evidence\gradle-home'
+}
 Write-Output 'TaxFlow360 toolchains activated for this PowerShell process only.'

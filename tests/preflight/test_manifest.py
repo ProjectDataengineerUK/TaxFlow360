@@ -5,6 +5,7 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools/preflight/src"))
 from taxflow_preflight.detect import load_manifest
+from taxflow_preflight.models import cache_root
 
 
 def test_manifest_is_approved_and_four_eyes():
@@ -20,3 +21,8 @@ def test_manifest_is_exact_and_official():
         assert len(tool.sha256) == 64
         assert "latest" not in tool.archive_url.lower()
         assert tool.version in unquote(tool.archive_url) or tool.id == "gradle-wrapper"
+
+
+def test_explicit_cache_root_is_resolved():
+    candidate = ROOT / ".local-evidence" / "test-cache"
+    assert cache_root(str(candidate)) == candidate.resolve()

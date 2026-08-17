@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 from pathlib import Path
 from typing import Literal
 
@@ -40,6 +41,8 @@ class Observation:
 def cache_root(value: str | None) -> Path:
     if value:
         path = Path(value).expanduser().resolve()
+    elif os.name == "nt" and os.getenv("LOCALAPPDATA"):
+        path = (Path(os.environ["LOCALAPPDATA"]) / "TaxFlow360" / "tool-cache").resolve()
     else:
         path = (Path.home() / ".taxflow360" / "tool-cache").resolve()
     return path

@@ -2,7 +2,8 @@
 param(
     [Parameter(Mandatory = $true)][ValidateSet('java','node','terraform','databricks','gradle-wrapper')][string]$Tool,
     [string]$ManifestPath = (Join-Path $PSScriptRoot '..\..\config\local-toolchains.yaml'),
-    [string]$CacheRoot = $(if ($env:TAXFLOW_TOOL_CACHE) { $env:TAXFLOW_TOOL_CACHE } else { Join-Path $env:LOCALAPPDATA 'TaxFlow360\tool-cache' })
+    [string]$CacheRoot = $(if ($env:TAXFLOW_TOOL_CACHE) { $env:TAXFLOW_TOOL_CACHE } else { Join-Path $env:LOCALAPPDATA 'TaxFlow360\tool-cache' }),
+    [string]$ExistingArtifact
 )
 $ErrorActionPreference = 'Stop'
 $repository = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
@@ -19,7 +20,14 @@ $stagingRoot = Join-Path $cache '.staging'
 $null = New-Item -ItemType Directory -Force -Path $stagingRoot
 $archive = Join-Path $stagingRoot ("{0}-{1}.download" -f $spec.id, [Guid]::NewGuid())
 try {
-    Invoke-WebRequest -UseBasicParsing -Uri $spec.archive_url -OutFile $archive -MaximumRedirection 5
+    if ($ExistingArtifact) {
+        Copy-Item -LiteralPath ([IO.Path]::GetFullPath($ExistingArtifact)) -Destination $archive
+    } else {
+        $curl = Get-Command curl.exe -ErrorAction Stop
+        & $curl.Source --fail --silent --show-error --location --max-redirs 5 --max-time 120 `
+            --output $archive --url $spec.archive_url
+        if ($LASTEXITCODE -ne 0) { throw "Download failed for $Tool." }
+    }
     if ((Get-Item -LiteralPath $archive).Length -gt $spec.max_archive_bytes) { throw 'Artifact exceeds approved size.' }
     $actual = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($actual -ne $spec.sha256) { throw "Checksum mismatch for $Tool." }
@@ -43,7 +51,8 @@ try {
                 }
             }
         } finally { $zip.Dispose() }
-        [IO.Compression.ZipFile]::ExtractToDirectory($archive, $stage)
+        & tar.exe -xf $archive -C $stage
+        if ($LASTEXITCODE -ne 0) { throw "Archive extraction failed for $Tool." }
         if (Test-Path -LiteralPath $target) { throw "Verified cache target already exists: $target" }
         Move-Item -LiteralPath $stage -Destination $target
     }
