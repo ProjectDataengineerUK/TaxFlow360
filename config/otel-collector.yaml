@@ -31,7 +31,11 @@ exporters:
     endpoint: "${env:OTEL_EXPORTER_OTLP_ENDPOINT:-http://localhost:4318}"
     tls:
       insecure: "${env:OTEL_EXPORTER_OTLP_INSECURE:-true}"
+extensions:
+  health_check:
+    endpoint: "${env:OTEL_HEALTH_ENDPOINT:-0.0.0.0:13133}"
 service:
+  extensions: [health_check]
   pipelines:
     traces:
       receivers: [otlp]

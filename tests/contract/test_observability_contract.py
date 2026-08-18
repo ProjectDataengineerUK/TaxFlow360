@@ -20,6 +20,7 @@ def test_collector_redacts_sensitive_attributes_and_has_all_pipelines():
     deleted = {item["key"] for item in actions if item["action"] == "delete"}
     assert {"cpf", "cnpj", "authorization", "db.statement"} <= deleted
     assert set(collector["service"]["pipelines"]) == {"traces", "metrics", "logs"}
+    assert "health_check" in collector["service"]["extensions"]
 
 
 def test_dashboard_is_valid_json_and_has_operational_panels():
