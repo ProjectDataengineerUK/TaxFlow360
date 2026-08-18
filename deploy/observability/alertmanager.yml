@@ -1,0 +1,13 @@
+route:
+  receiver: taxflow-local-log
+  group_by: [alertname, service, environment]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+receivers:
+  - name: taxflow-local-log
+    webhook_configs: []
+inhibit_rules:
+  - source_matchers: ["severity=critical"]
+    target_matchers: ["severity=high"]
+    equal: ["service", "environment"]
