@@ -1,0 +1,13 @@
+{
+  "title": "TaxFlow 360 Operations",
+  "schemaVersion": 39,
+  "tags": ["taxflow360", "slo", "synthetic-safe"],
+  "panels": [
+    {"type": "timeseries", "title": "API error rate", "targets": [{"expr": "sum(rate(http_server_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_server_requests_total[5m]))"}]},
+    {"type": "timeseries", "title": "Tax p95 latency", "targets": [{"expr": "histogram_quantile(0.95, sum(rate(http_server_request_duration_seconds_bucket{service=\"tax-service\"}[5m])) by (le))"}]},
+    {"type": "timeseries", "title": "Consumer lag", "targets": [{"expr": "taxflow_consumer_lag_seconds"}]},
+    {"type": "stat", "title": "Critical divergences", "targets": [{"expr": "sum(taxflow_reconciliation_divergences{severity=\"critical\"})"}]},
+    {"type": "timeseries", "title": "Pipeline freshness", "targets": [{"expr": "taxflow_pipeline_freshness_seconds"}]}
+  ],
+  "templating": {"list": [{"name": "environment", "type": "query", "query": "label_values(deployment_environment)"}, {"name": "service", "type": "query", "query": "label_values(service_name)"}]}
+}

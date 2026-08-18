@@ -1,0 +1,47 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "${env:OTEL_GRPC_ENDPOINT:-0.0.0.0:4317}"
+      http:
+        endpoint: "${env:OTEL_HTTP_ENDPOINT:-0.0.0.0:4318}"
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+  batch:
+    timeout: 5s
+    send_batch_size: 1024
+  attributes/redact:
+    actions:
+      - {key: cpf, action: delete}
+      - {key: cnpj, action: delete}
+      - {key: email, action: delete}
+      - {key: phone, action: delete}
+      - {key: authorization, action: delete}
+      - {key: db.statement, action: delete}
+  resource/required:
+    attributes:
+      - {key: deployment.environment, value: "${env:ENVIRONMENT:-local}", action: upsert}
+      - {key: service.namespace, value: taxflow360, action: upsert}
+exporters:
+  debug:
+    verbosity: basic
+  otlphttp/backend:
+    endpoint: "${env:OTEL_EXPORTER_OTLP_ENDPOINT:-http://localhost:4318}"
+    tls:
+      insecure: "${env:OTEL_EXPORTER_OTLP_INSECURE:-true}"
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/redact, resource/required, batch]
+      exporters: [otlphttp/backend, debug]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/redact, resource/required, batch]
+      exporters: [otlphttp/backend, debug]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, attributes/redact, resource/required, batch]
+      exporters: [otlphttp/backend, debug]

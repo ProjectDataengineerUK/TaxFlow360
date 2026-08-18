@@ -1,0 +1,40 @@
+version: 1.0.0
+status: approved
+service_level_objectives:
+  - id: tax-calculation-availability
+    service: tax-service
+    indicator: successful_requests / valid_requests
+    target: 0.999
+    window: 30d
+    burn_alerts: [5m, 1h, 6h]
+  - id: tax-calculation-latency
+    service: tax-service
+    indicator: http_server_request_duration_seconds{route="/v1/tax/calculate",quantile="0.95"}
+    target_seconds: 0.5
+    window: 30d
+  - id: ingestion-freshness
+    service: ingestion-service
+    indicator: source_to_bronze_lag_seconds
+    target_seconds: 900
+    window: 30d
+  - id: reconciliation-resolution
+    service: reconciliation-service
+    indicator: divergences_resolved_within_sla / divergences_total
+    target: 0.995
+    window: 30d
+  - id: shadow-tax-freshness
+    service: shadow-tax
+    indicator: gold_shadow_tax_freshness_seconds
+    target_seconds: 900
+    window: 30d
+  - id: regulatory-citation-completeness
+    service: regulatory-ai
+    indicator: responses_with_official_source / responses_total
+    target: 1.0
+    window: 30d
+governance:
+  tenant_dimension: tenant_hash
+  pii_dimensions_forbidden: [document, cpf, cnpj, email, phone, token]
+  missing_evidence_status: BLOCKED
+  preparedBy: sre-observability-a
+  approvedBy: security-observability-b
