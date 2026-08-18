@@ -66,7 +66,7 @@ $env:PYTHONPATH='tools/certification/src;services/query-service/src;services/reg
 python -m pytest tests -q --ignore=tests/performance/test_regulatory_100k.py --ignore=tests/performance/test_shadow_tax_100k.py
 ```
 
-O último gate local registrou 84 testes Python aprovados, quatro serviços JVM aprovados, typecheck/build Next.js aprovados e validação Terraform do módulo de certificação. Providers cloud, Databricks workspace, E2E, performance hospedada e aprovações humanas permanecem `BLOCKED`. Não declarar a plataforma `Built` ou `Shipped` antes da matriz de certificação completa.
+O último gate local registrou 86 testes Python aprovados, quatro serviços JVM aprovados, typecheck/build Next.js aprovados, contratos de observabilidade aprovados e validação Terraform do módulo de certificação. Providers cloud, Databricks workspace, E2E, performance hospedada e aprovações humanas permanecem `BLOCKED`. Não declarar a plataforma `Built` ou `Shipped` antes da matriz de certificação completa.
 
 ## Estado dos módulos
 

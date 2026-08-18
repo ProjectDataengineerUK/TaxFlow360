@@ -8,7 +8,7 @@ Escopo: dados sintéticos, execução local, sem credenciais de nuvem
 
 | Gate | Resultado | Evidência |
 |---|---|---|
-| Python regression | PASS | 84 testes, 2 warnings de dependência/cache |
+| Python regression | PASS | 86 testes, 2 warnings de dependência/cache |
 | JVM tenant-service | PASS | Gradle/JUnit, BUILD SUCCESSFUL |
 | JVM tax-service | PASS | Gradle/JUnit, BUILD SUCCESSFUL |
 | JVM payment-service | PASS | Gradle/JUnit, código 0 |
@@ -17,6 +17,7 @@ Escopo: dados sintéticos, execução local, sem credenciais de nuvem
 | Frontend production build | PASS | Next.js 15.5.0, 9 rotas estáticas |
 | Terraform formatting | PASS | `terraform fmt -check -recursive` |
 | Terraform certification validate | PASS | `init -backend=false` + `validate` |
+| Observability/data-plane contracts | PASS | 5 testes; YAML Collector, SLOs, alertas e dashboard válidos |
 | Databricks workspace/streaming | BLOCKED | workspace, Unity Catalog, CDF e serverless não configurados |
 | Databricks AI Search | BLOCKED | workspace e AI Search não configurados |
 | Terraform AWS/Azure/GCP plan | BLOCKED | sem contas, providers autorizados ou credenciais |
