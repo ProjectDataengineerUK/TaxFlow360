@@ -1,0 +1,62 @@
+version: 1.0.0
+status: approved
+currency: BRL
+default_enabled: false
+security:
+  public_endpoints: false
+  workload_identity_required: true
+  customer_managed_key_required: true
+  tls_required: true
+  static_credentials_forbidden: true
+services:
+  relational:
+    logical_name: transactional-postgresql
+    source_of_truth: true
+    backups_days: 35
+    multi_zone: true
+    providers:
+      aws: aurora-postgresql
+      azure: postgresql-flexible-server
+      gcp: cloud-sql-postgresql
+  event_backbone:
+    logical_name: taxflow-events
+    delivery: at_least_once
+    schema_registry: required
+    dead_letter: required
+    providers:
+      aws: msk-kafka
+      azure: event-hubs-kafka-compatible
+      gcp: pubsub
+  cache:
+    logical_name: ephemeral-cache
+    source_of_truth: false
+    persistence: disabled
+    providers:
+      aws: elasticache-redis
+      azure: azure-cache-for-redis
+      gcp: memorystore-redis
+  observability:
+    logical_name: taxflow-observability
+    logs:
+      application_retention_days: 30
+      audit_retention_days: 2555
+      pii_payloads: forbidden
+    traces:
+      protocol: otlp
+      propagation: w3c-trace-context
+    metrics:
+      required_dimensions: [environment, service, tenant_hash, cloud]
+    providers:
+      aws: cloudwatch-otel
+      azure: azure-monitor-otel
+      gcp: cloud-logging-otel
+invariants:
+  - "relational.source_of_truth == true"
+  - "cache.source_of_truth == false"
+  - "security.public_endpoints == false"
+  - "security.workload_identity_required == true"
+  - "security.static_credentials_forbidden == true"
+  - "services.observability.logs.audit_retention_days >= 2555"
+approval:
+  preparedBy: platform-data-plane-a
+  approvedBy: platform-security-b
